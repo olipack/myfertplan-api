@@ -11,10 +11,16 @@ class APIFeatures {
 
     // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj)
-    queryStr = queryStr.replace(
-      /\b(gte|gt|lte|lt|regex)\b/g,
-      match => `$${match}`
-    )
+    const queryStrArray = queryStr.split(',')
+    queryStrArray.forEach((el, i, arr) => {
+      arr[i] = el.replace(/\b(gte|gt|lte|lt|regex)\b/g, match => `$${match}`)
+      console.log('el after 1st replace: ', arr[i])
+      if (el.includes('regex')) {
+        arr[i] = arr[i].replace(`"}`, `","$options":"i"}`)
+      }
+    })
+    queryStr = queryStrArray.join(',')
+    console.log(queryStr)
     this.query = this.query.find(JSON.parse(queryStr))
     return this
   }

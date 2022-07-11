@@ -4,7 +4,9 @@ const authController = require('../controllers/authController')
 
 const router = express.Router()
 
-// router.param('id', drugController.checkID);
+router
+  .route('/drugByString')
+  .get(drugController.drugByString, drugController.getAllDrugs)
 
 router
   .route('/')

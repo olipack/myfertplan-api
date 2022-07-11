@@ -15,18 +15,79 @@ const drugSchema = new mongoose.Schema(
     },
     slug: String,
     activeIngredient: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'ActiveIngredient',
+      type: String,
+      enum: [
+        '25-OH vitamin D',
+        'acetylsalicylic acid',
+        'cetrorelix',
+        'dehydroepiandrosterone (DHEA)',
+        'dalteparin',
+        'diclofenac',
+        'estradiol valerate',
+        'estradiol / dydrogesterone',
+        'enoxiparine',
+        'folic acid',
+        'follitropin alfa',
+        'follitropin alfa / lutropin alfa',
+        'follitropin beta',
+        'ganirelix',
+        'goserelin',
+        'hydroxychloroquine',
+        'human chorionic gonadotropin',
+        'lenograstim',
+        'leuprolide acetate',
+        'levonorgestrel / ethinylestradiol',
+        'levothyroxine',
+        'medroxy-progesterone',
+        'menopausal gonadotropin',
+        'menotrophin',
+        'myo inositol / folic acid',
+        'nafarelin',
+        'nicotinamide mononucleotide',
+        'prednisone',
+        'prednisolone',
+        'progesterone micronized',
+        'sildenafil',
+        'soybean oil',
+        'tacrolimus',
+        'triptoreline',
+        'vitamin C',
+        'vitamin E',
+      ],
       required: [true, 'A drug must have an active ingredient'],
     },
     drugClass: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'DrugClass',
+      type: String,
+      enum: [
+        'anticoagulants & antiagragants',
+        'corticosteroids',
+        'estrogens',
+        'gestagens',
+        'GnRH agonists',
+        'GnRH antagonists',
+        'gonadotropins',
+        'immunomodulators',
+        'oral contraceptives',
+        'vitamins and supplements',
+      ],
       required: [true, 'A drug must have a drug class'],
     },
     formulation: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Formulation',
+      type: String,
+      enum: [
+        'capsules',
+        'effervescent tablets',
+        'infusions',
+        'intramuscular injections',
+        'nasal spray',
+        'patches',
+        'suchets',
+        'vaginal capsules',
+        'vaginal pessaries',
+        'vaginal gel',
+        'subcutaneous injections',
+        'tablets',
+      ],
       required: [true, 'A drug must have a formulation'],
     },
     units: {
@@ -47,14 +108,15 @@ drugSchema.pre('save', function (next) {
 })
 
 // QUERY MIDDLEWARE
-drugSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: 'activeIngredient',
-  })
-    .populate({ path: 'drugClass' })
-    .populate({ path: 'formulation' })
-  next()
-})
+// drugSchema.pre(/^find/, function (next) {
+//   this.populate({
+//     path: 'activeIngredient',
+//     select: 'name',
+//   })
+//     .populate({ path: 'drugClass', select: 'name' })
+//     .populate({ path: 'formulation', select: 'name' })
+//   next()
+// })
 
 const Drug = mongoose.model('Drug', drugSchema)
 
