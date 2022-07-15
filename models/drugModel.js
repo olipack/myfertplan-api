@@ -1,5 +1,12 @@
 const mongoose = require('mongoose')
 const slugify = require('slugify')
+const countries = require('i18n-iso-countries')
+
+const countriesObj = countries.getNames('en', { select: 'official' })
+const countryKeysArray = Object.keys(countriesObj)
+const countryNamesArray = Object.keys(countriesObj).map(
+  key => countriesObj[key]
+)
 
 const drugSchema = new mongoose.Schema(
   {
@@ -14,80 +21,21 @@ const drugSchema = new mongoose.Schema(
       ],
     },
     slug: String,
+    countryCode: {
+      type: String,
+      enum: countryKeysArray,
+      required: [true, 'A drug must have a "ISO 3166-1 Alpha-2 code"'],
+    },
     activeIngredient: {
       type: String,
-      enum: [
-        '25-OH vitamin D',
-        'acetylsalicylic acid',
-        'cetrorelix',
-        'dehydroepiandrosterone (DHEA)',
-        'dalteparin',
-        'diclofenac',
-        'estradiol valerate',
-        'estradiol / dydrogesterone',
-        'enoxiparine',
-        'folic acid',
-        'follitropin alfa',
-        'follitropin alfa / lutropin alfa',
-        'follitropin beta',
-        'ganirelix',
-        'goserelin',
-        'hydroxychloroquine',
-        'human chorionic gonadotropin',
-        'lenograstim',
-        'leuprolide acetate',
-        'levonorgestrel / ethinylestradiol',
-        'levothyroxine',
-        'medroxy-progesterone',
-        'menopausal gonadotropin',
-        'menotrophin',
-        'myo inositol / folic acid',
-        'nafarelin',
-        'nicotinamide mononucleotide',
-        'prednisone',
-        'prednisolone',
-        'progesterone micronized',
-        'sildenafil',
-        'soybean oil',
-        'tacrolimus',
-        'triptoreline',
-        'vitamin C',
-        'vitamin E',
-      ],
       required: [true, 'A drug must have an active ingredient'],
     },
     drugClass: {
       type: String,
-      enum: [
-        'anticoagulants & antiagragants',
-        'corticosteroids',
-        'estrogens',
-        'gestagens',
-        'GnRH agonists',
-        'GnRH antagonists',
-        'gonadotropins',
-        'immunomodulators',
-        'oral contraceptives',
-        'vitamins and supplements',
-      ],
       required: [true, 'A drug must have a drug class'],
     },
     formulation: {
       type: String,
-      enum: [
-        'capsules',
-        'effervescent tablets',
-        'infusions',
-        'intramuscular injections',
-        'nasal spray',
-        'patches',
-        'suchets',
-        'vaginal capsules',
-        'vaginal pessaries',
-        'vaginal gel',
-        'subcutaneous injections',
-        'tablets',
-      ],
       required: [true, 'A drug must have a formulation'],
     },
     units: {

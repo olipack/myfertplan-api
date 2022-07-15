@@ -52,7 +52,6 @@ exports.getOne = Model =>
     const query = Model.findById(req.params.id)
     // findById is a function that does: Model.findOne({ _id = req.params.id })
     const doc = await query
-    console.log(doc)
     if (!doc) {
       return next(new AppError('No document found with that ID', 404))
     }
