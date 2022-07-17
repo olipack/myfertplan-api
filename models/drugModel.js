@@ -4,16 +4,12 @@ const countries = require('i18n-iso-countries')
 
 const countriesObj = countries.getNames('en', { select: 'official' })
 const countryKeysArray = Object.keys(countriesObj)
-const countryNamesArray = Object.keys(countriesObj).map(
-  key => countriesObj[key]
-)
 
 const drugSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'The drug must have a name'],
-      unique: true,
       trim: true,
       maxlength: [
         80,
@@ -36,12 +32,13 @@ const drugSchema = new mongoose.Schema(
     },
     formulation: {
       type: String,
-      required: [true, 'A drug must have a formulation'],
+      required: [true, 'A drug must have a pharmaceutical formulation'],
     },
-    units: {
-      type: Number,
-      required: [true, 'How many units are contained in one box?'],
+    administration: {
+      type: String,
+      required: [true, 'A drug must have a route of administration'],
     },
+    packSizes: [Number],
   },
   {
     toJSON: { virtuals: true },
